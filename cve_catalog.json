@@ -1,0 +1,1200 @@
+{
+  "cves": [
+    {
+      "exact": [],
+      "id": "CVE-2008-6976",
+      "published": "2009-08-19",
+      "ranges": [
+        {
+          "max_inclusive": "2.9.51",
+          "min_inclusive": "2.0.0"
+        },
+        {
+          "max_inclusive": "3.13.0",
+          "min_inclusive": "3.0.0"
+        }
+      ],
+      "title": "MikroTik RouterOS 3.x through 3.13 and 2.x through 2.9.51 allows remote attackers to modify Network Management System (NMS) settings via a crafted SNMP set request.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "5.15.0"
+      ],
+      "id": "CVE-2012-6050",
+      "published": "2012-11-27",
+      "ranges": [],
+      "title": "The winbox service in MikroTik RouterOS 5.15 and earlier allows remote attackers to cause a denial of service (CPU consumption), read the router version, and possibly have other i\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2015-2350",
+      "published": "2015-03-19",
+      "ranges": [
+        {
+          "max_inclusive": "5.0.0"
+        }
+      ],
+      "title": "Cross-site request forgery (CSRF) vulnerability in MikroTik RouterOS 5.0 and earlier allows remote attackers to hijack the authentication of administrators for requests that chang\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2017-20149",
+      "published": "2022-10-15",
+      "ranges": [
+        {
+          "max_exclusive": "6.37.5"
+        },
+        {
+          "max_exclusive": "6.38.5",
+          "min_inclusive": "6.38.0"
+        }
+      ],
+      "title": "The Mikrotik RouterOS web server allows memory corruption in releases before Stable 6.38.5 and Long-term 6.37.5, aka Chimay-Red.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.37.4",
+        "6.83.3"
+      ],
+      "id": "CVE-2017-6297",
+      "published": "2017-02-27",
+      "ranges": [],
+      "title": "The L2TP Client in MikroTik RouterOS versions 6.38.3 and 6.37.4 does not enable IPsec encryption after a reboot, which allows man-in-the-middle attackers to view transmitted data \u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.25.0"
+      ],
+      "id": "CVE-2017-6444",
+      "published": "2017-03-12",
+      "ranges": [],
+      "title": "The MikroTik Router hAP Lite 6.25 has no protection mechanism for unsolicited TCP ACK packets in the case of a fast network connection, which allows remote attackers to cause a de\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.38.5"
+      ],
+      "id": "CVE-2017-7285",
+      "published": "2017-03-29",
+      "ranges": [],
+      "title": "A vulnerability in the network stack of MikroTik Version 6.38.5 released 2017-03-09 could allow an unauthenticated remote attacker to exhaust all available CPU via a flood of TCP \u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.38.5"
+      ],
+      "id": "CVE-2017-8338",
+      "published": "2017-05-18",
+      "ranges": [],
+      "title": "A vulnerability in MikroTik Version 6.38.5 could allow an unauthenticated remote attacker to exhaust all available CPU via a flood of UDP packets on port 500 (used for L2TP over I\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-1156",
+      "published": "2018-08-23",
+      "ranges": [
+        {
+          "max_exclusive": "6.40.9"
+        },
+        {
+          "max_exclusive": "6.42.7"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.42.7 and 6.40.9 is vulnerable to stack buffer overflow through the license upgrade interface.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-1157",
+      "published": "2018-08-23",
+      "ranges": [
+        {
+          "max_exclusive": "6.40.9"
+        },
+        {
+          "max_exclusive": "6.42.7"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.42.7 and 6.40.9 is vulnerable to a memory exhaustion vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-1158",
+      "published": "2018-08-23",
+      "ranges": [
+        {
+          "max_exclusive": "6.40.9"
+        },
+        {
+          "max_exclusive": "6.42.7"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.42.7 and 6.40.9 is vulnerable to a stack exhaustion vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-1159",
+      "published": "2018-08-23",
+      "ranges": [
+        {
+          "max_exclusive": "6.40.9"
+        },
+        {
+          "max_exclusive": "6.42.7"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.42.7 and 6.40.9 is vulnerable to a memory corruption vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-14847",
+      "published": "2018-08-02",
+      "ranges": [
+        {
+          "max_inclusive": "6.42.0"
+        }
+      ],
+      "title": "MikroTik RouterOS through 6.42 allows unauthenticated remote attackers to read arbitrary files and remote authenticated attackers to write arbitrary files due to a directory trave\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2018-5951",
+      "published": "2020-03-02",
+      "ranges": [],
+      "title": "An issue was discovered in Mikrotik RouterOS.",
+      "unbounded": true,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.42.0"
+      ],
+      "id": "CVE-2018-7445",
+      "published": "2018-03-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.41.3"
+        }
+      ],
+      "title": "A buffer overflow was found in the MikroTik RouterOS SMB service when processing NetBIOS session request messages.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-13074",
+      "published": "2019-07-03",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.3"
+        }
+      ],
+      "title": "A vulnerability in the FTP daemon on MikroTik routers through 6.44.3 could allow remote attackers to exhaust all available memory, causing the device to reboot because of uncontro\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.45.0"
+      ],
+      "id": "CVE-2019-13954",
+      "published": "2019-07-26",
+      "ranges": [
+        {
+          "max_exclusive": "6.44.5"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.44.5 (long-term release tree) is vulnerable to memory exhaustion.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.45.0"
+      ],
+      "id": "CVE-2019-13955",
+      "published": "2019-07-26",
+      "ranges": [
+        {
+          "max_exclusive": "6.44.5"
+        }
+      ],
+      "title": "Mikrotik RouterOS before 6.44.5 (long-term release tree) is vulnerable to stack exhaustion.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-15055",
+      "published": "2019-08-26",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.5"
+        },
+        {
+          "max_inclusive": "6.45.3",
+          "min_inclusive": "6.45.0"
+        }
+      ],
+      "title": "MikroTik RouterOS through 6.44.5 and 6.45.x through 6.45.3 improperly handles the disk name, which allows authenticated users to delete arbitrary files.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-16160",
+      "published": "2020-10-07",
+      "ranges": [
+        {
+          "max_exclusive": "6.45.5"
+        }
+      ],
+      "title": "An integer underflow in the SMB server of MikroTik RouterOS before 6.45.5 allows remote unauthenticated attackers to crash the service.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3924",
+      "published": "2019-02-20",
+      "ranges": [
+        {
+          "max_exclusive": "6.42.12"
+        },
+        {
+          "max_exclusive": "6.43.12"
+        }
+      ],
+      "title": "MikroTik RouterOS before 6.43.12 (stable) and 6.42.12 (long-term) is vulnerable to an intermediary vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.41.0",
+        "6.42.0",
+        "6.43.0",
+        "6.44.0"
+      ],
+      "id": "CVE-2019-3943",
+      "published": "2019-04-10",
+      "ranges": [
+        {
+          "max_inclusive": "6.42.12"
+        },
+        {
+          "max_inclusive": "6.43.12"
+        }
+      ],
+      "title": "MikroTik RouterOS versions Stable 6.43.12 and below, Long-term 6.42.12 and below, and Testing 6.44beta75 and below are vulnerable to an authenticated, remote directory traversal v\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3976",
+      "published": "2019-10-29",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.5"
+        },
+        {
+          "max_inclusive": "6.45.6"
+        }
+      ],
+      "title": "RouterOS 6.45.6 Stable, RouterOS 6.44.5 Long-term, and below are vulnerable to an arbitrary directory creation vulnerability via the upgrade package's name field.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3977",
+      "published": "2019-10-29",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.5"
+        },
+        {
+          "max_inclusive": "6.45.6"
+        }
+      ],
+      "title": "RouterOS 6.45.6 Stable, RouterOS 6.44.5 Long-term, and below insufficiently validate where upgrade packages are download from when using the autoupgrade feature.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3978",
+      "published": "2019-10-29",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.5"
+        },
+        {
+          "max_inclusive": "6.45.6"
+        }
+      ],
+      "title": "RouterOS versions 6.45.6 Stable, 6.44.5 Long-term, and below allow remote unauthenticated attackers to trigger DNS queries via port 8291.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3979",
+      "published": "2019-10-29",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.5"
+        },
+        {
+          "max_inclusive": "6.45.6"
+        }
+      ],
+      "title": "RouterOS versions 6.45.6 Stable, 6.44.5 Long-term, and below are vulnerable to a DNS unrelated data attack.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2019-3981",
+      "published": "2020-01-14",
+      "ranges": [
+        {
+          "max_exclusive": "6.43.0"
+        }
+      ],
+      "title": "MikroTik Winbox 3.20 and below is vulnerable to man in the middle attacks.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-10364",
+      "published": "2020-03-23",
+      "ranges": [
+        {
+          "max_inclusive": "6.44.3"
+        }
+      ],
+      "title": "The SSH daemon on MikroTik routers through v6.44.3 could allow remote attackers to generate CPU activity, trigger refusal of new authorized connections, and cause a reboot via con\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "7.0.0"
+      ],
+      "id": "CVE-2020-11881",
+      "published": "2020-09-14",
+      "ranges": [
+        {
+          "max_inclusive": "6.46.5",
+          "min_inclusive": "6.41.3"
+        }
+      ],
+      "title": "An array index error in MikroTik RouterOS 6.41.3 through 6.46.5, and 7.x through 7.0 Beta5, allows an unauthenticated remote attacker to crash the SMB server via modified setup-re\u2026",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20021",
+      "published": "2023-07-12",
+      "ranges": [
+        {
+          "max_inclusive": "6.46.3"
+        }
+      ],
+      "title": "An issue discovered in MikroTik Router v6.46.3 and earlier allows attacker to cause denial of service via misconfiguration in the SSH daemon.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.5"
+      ],
+      "id": "CVE-2020-20211",
+      "published": "2021-07-07",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.5 (long-term tree) suffers from an assertion failure vulnerability in the /nova/bin/console process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.5"
+      ],
+      "id": "CVE-2020-20212",
+      "published": "2021-07-07",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.5 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/console process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.5"
+      ],
+      "id": "CVE-2020-20213",
+      "published": "2021-07-07",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.5 (long-term tree) suffers from an stack exhaustion vulnerability in the /nova/bin/net process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20214",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from an assertion failure vulnerability in the btest process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20215",
+      "published": "2021-07-07",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/diskd process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20216",
+      "published": "2021-07-07",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/graphing process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20217",
+      "published": "2021-07-08",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from an uncontrolled resource consumption vulnerability in the /nova/bin/route process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20218",
+      "published": "2021-05-03",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/traceroute process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20219",
+      "published": "2021-07-21",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/igmp-proxy process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20220",
+      "published": "2021-05-18",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs prior to stable 6.47 suffers from a memory corruption vulnerability in the /nova/bin/bfd process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20221",
+      "published": "2021-07-21",
+      "ranges": [
+        {
+          "max_exclusive": "6.44.6"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.44.6 (long-term tree) suffers from an uncontrolled resource consumption vulnerability in the /nova/bin/cerm process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.44.6"
+      ],
+      "id": "CVE-2020-20222",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.44.6 (long-term tree) suffers from a memory corruption vulnerability in the /nova/bin/sniffer process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20225",
+      "published": "2021-07-07",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from an assertion failure vulnerability in the /nova/bin/user process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.47.0"
+      ],
+      "id": "CVE-2020-20227",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs stable 6.47 suffers from a memory corruption vulnerability in the /nova/bin/diskd process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20230",
+      "published": "2021-07-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable 6.47 suffers from an uncontrolled resource consumption in the sshd process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20231",
+      "published": "2021-07-14",
+      "ranges": [
+        {
+          "max_inclusive": "6.48.3",
+          "min_inclusive": "6.44.6"
+        }
+      ],
+      "title": "Mikrotik RouterOs through stable version 6.48.3 suffers from a memory corruption vulnerability in the /nova/bin/detnet process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.46.3"
+      ],
+      "id": "CVE-2020-20236",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.46.3 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/sniffer process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.46.3"
+      ],
+      "id": "CVE-2020-20237",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs 6.46.3 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/sniffer process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.46.3"
+      ],
+      "id": "CVE-2020-20245",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs stable 6.46.3 suffers from a memory corruption vulnerability in the log process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.46.3"
+      ],
+      "id": "CVE-2020-20246",
+      "published": "2021-05-18",
+      "ranges": [],
+      "title": "Mikrotik RouterOs stable 6.46.3 suffers from a memory corruption vulnerability in the mactel process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20247",
+      "published": "2021-05-03",
+      "ranges": [
+        {
+          "max_exclusive": "6.46.5"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.46.5 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/traceroute process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.47.0"
+      ],
+      "id": "CVE-2020-20248",
+      "published": "2021-07-19",
+      "ranges": [],
+      "title": "Mikrotik RouterOs before stable 6.47 suffers from an uncontrolled resource consumption in the memtest process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20249",
+      "published": "2021-07-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable 6.47 suffers from a memory corruption vulnerability in the resolver process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20250",
+      "published": "2021-07-13",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable version 6.47 suffers from a memory corruption vulnerability in the /nova/bin/lcdstat process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20252",
+      "published": "2021-07-13",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable version 6.47 suffers from a memory corruption vulnerability in the /nova/bin/lcdstat process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20253",
+      "published": "2021-05-18",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from a divison by zero vulnerability in the /nova/bin/lcdstat process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20254",
+      "published": "2021-05-18",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/lcdstat process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20262",
+      "published": "2021-07-21",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from an assertion failure vulnerability in the /ram/pckg/security/nova/bin/ipsec process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20264",
+      "published": "2021-05-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) in the /ram/pckg/advanced-tools/nova/bin/netwatch process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20265",
+      "published": "2021-05-11",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from a memory corruption vulnerability in the /ram/pckg/wireless/nova/bin/wireless process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20266",
+      "published": "2021-05-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/dot1x process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2020-20267",
+      "published": "2021-05-11",
+      "ranges": [
+        {
+          "max_exclusive": "6.47.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before 6.47 (stable tree) suffers from a memory corruption vulnerability in the /nova/bin/resolver process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.47.0"
+      ],
+      "id": "CVE-2020-22844",
+      "published": "2022-02-28",
+      "ranges": [],
+      "title": "A buffer overflow in Mikrotik RouterOS 6.47 allows unauthenticated attackers to cause a denial of service (DOS) via crafted SMB requests.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.47.0"
+      ],
+      "id": "CVE-2020-22845",
+      "published": "2022-02-28",
+      "ranges": [],
+      "title": "A buffer overflow in Mikrotik RouterOS 6.47 allows unauthenticated attackers to cause a denial of service (DOS) via crafted FTP requests.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.47.9"
+      ],
+      "id": "CVE-2021-27221",
+      "published": "2021-03-19",
+      "ranges": [],
+      "title": "MikroTik RouterOS 6.47.9 allows remote authenticated ftp users to create or overwrite arbitrary .rsc files via the /export command.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2021-3014",
+      "published": "2021-01-04",
+      "ranges": [],
+      "title": "In MikroTik RouterOS through 2021-01-04, the hotspot login page is vulnerable to reflected XSS via the target parameter.",
+      "unbounded": false,
+      "unparsed": true
+    },
+    {
+      "exact": [],
+      "id": "CVE-2021-36613",
+      "published": "2022-05-11",
+      "ranges": [
+        {
+          "max_exclusive": "6.48.2"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable 6.48.2 suffers from a memory corruption vulnerability in the ptp process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2021-36614",
+      "published": "2022-05-11",
+      "ranges": [
+        {
+          "max_exclusive": "6.48.2"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable 6.48.2 suffers from a memory corruption vulnerability in the tr069-client process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.46.8",
+        "6.47.10",
+        "6.47.9"
+      ],
+      "id": "CVE-2021-41987",
+      "published": "2022-03-16",
+      "ranges": [],
+      "title": "In the SCEP Server of RouterOS in certain Mikrotik products, an attacker can trigger a heap-based buffer overflow that leads to remote code execution.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "7.4.0"
+      ],
+      "id": "CVE-2022-34960",
+      "published": "2022-08-25",
+      "ranges": [],
+      "title": "The container package in MikroTik RouterOS 7.4beta4 allows an attacker to create mount points pointing to symbolic links, which resolve to locations on the host device.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2022-36522",
+      "published": "2022-08-26",
+      "ranges": [
+        {
+          "max_inclusive": "6.48.3"
+        }
+      ],
+      "title": "Mikrotik RouterOs through stable v6.48.3 was discovered to contain an assertion failure in the component /advanced-tools/nova/bin/netwatch.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2022-45313",
+      "published": "2022-12-05",
+      "ranges": [
+        {
+          "max_exclusive": "7.5.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable v7.5 was discovered to contain an out-of-bounds read in the hotspot process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2022-45315",
+      "published": "2022-12-05",
+      "ranges": [
+        {
+          "max_exclusive": "7.6.0"
+        }
+      ],
+      "title": "Mikrotik RouterOs before stable v7.6 was discovered to contain an out-of-bounds read in the snmp process.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.40.5"
+      ],
+      "id": "CVE-2023-24094",
+      "published": "2023-03-27",
+      "ranges": [],
+      "title": "An issue in the bridge2 component of MikroTik RouterOS v6.40.5 allows attackers to cause a Denial of Service (DoS) via crafted packets.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2023-30799",
+      "published": "2023-07-19",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.7",
+          "min_inclusive": "6.34.0"
+        },
+        {
+          "max_inclusive": "6.48.7"
+        }
+      ],
+      "title": "MikroTik RouterOS stable before 6.49.7 and long-term through 6.48.6 are vulnerable to a privilege escalation issue.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2023-30800",
+      "published": "2023-09-07",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.10",
+          "min_inclusive": "6.0.0"
+        }
+      ],
+      "title": "The web server used by MikroTik RouterOS version 6 is affected by a heap memory corruption issue.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2023-32154",
+      "published": "2024-05-03",
+      "ranges": [
+        {
+          "max_exclusive": "6.48.7"
+        }
+      ],
+      "title": "Mikrotik RouterOS RADVD Out-Of-Bounds Write Remote Code Execution Vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2023-41570",
+      "published": "2023-11-14",
+      "ranges": [
+        {
+          "max_exclusive": "7.12.0",
+          "min_inclusive": "7.1.0"
+        }
+      ],
+      "title": "MikroTik RouterOS v7.1 to 7.11 was discovered to contain incorrect access control mechanisms in place for the Rest API.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2024-54772",
+      "published": "2025-02-11",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.18",
+          "min_inclusive": "6.43.0"
+        },
+        {
+          "max_exclusive": "7.18.0",
+          "min_inclusive": "7.1.0"
+        },
+        {
+          "max_inclusive": "6.49.13",
+          "min_inclusive": "6.43.13"
+        }
+      ],
+      "title": "An issue was discovered in the Winbox service of MikroTik RouterOS long-term release v6.43.13 through v6.49.13 and stable v6.43 through v7.17.2.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [
+        "6.40.5"
+      ],
+      "id": "CVE-2024-54952",
+      "published": "2025-05-29",
+      "ranges": [],
+      "title": "MikroTik RouterOS 6.40.5, the SMB service contains a memory corruption vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2025-6443",
+      "published": "2025-06-25",
+      "ranges": [
+        {
+          "max_exclusive": "7.20.0"
+        }
+      ],
+      "title": "Mikrotik RouterOS VXLAN Source IP Improper Access Control Vulnerability.",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-67276",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "7.23.4",
+          "min_inclusive": "7.9.0"
+        },
+        {
+          "max_exclusive": "7.24.2",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "RouterOS 7 SSH: \u043d\u0435\u043f\u043e\u0432\u043d\u0430 \u043f\u0435\u0440\u0435\u0432\u0456\u0440\u043a\u0430 RSA-\u043a\u043b\u044e\u0447\u0430",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-67277",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.21",
+          "min_inclusive": "6.0.0"
+        },
+        {
+          "max_exclusive": "7.23.4",
+          "min_inclusive": "7.0.0"
+        },
+        {
+          "max_exclusive": "7.24.2",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "\u0421\u0435\u0440\u0432\u0456\u0441 bandwidth-test \u0434\u043e \u0430\u0432\u0442\u0435\u043d\u0442\u0438\u0444\u0456\u043a\u0430\u0446\u0456\u0457",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-67278",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "7.23.6",
+          "min_inclusive": "7.0.0"
+        },
+        {
+          "max_exclusive": "7.24.3",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "\u041f\u0440\u0438\u0439\u043d\u044f\u0442\u0442\u044f \u043f\u0456\u0434\u0440\u043e\u0431\u043b\u0435\u043d\u0438\u0445 RSA-\u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043a\u0430\u0442\u0456\u0432 \u0456 SSH host key",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-67279",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.21",
+          "min_inclusive": "6.0.0"
+        },
+        {
+          "max_exclusive": "7.23.4",
+          "min_inclusive": "7.0.0"
+        },
+        {
+          "max_exclusive": "7.24.2",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "SSH-\u043a\u0430\u043d\u0430\u043b \u0431\u0435\u0437 \u0430\u0432\u0442\u0435\u043d\u0442\u0438\u0444\u0456\u043a\u0430\u0446\u0456\u0457",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-67281",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "7.23.4",
+          "min_inclusive": "7.20.0"
+        },
+        {
+          "max_exclusive": "7.24.2",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "\u0427\u0438\u0442\u0430\u043d\u043d\u044f \u0444\u0430\u0439\u043b\u0456\u0432 \u0447\u0435\u0440\u0435\u0437 WebFig \u0431\u0435\u0437 \u0430\u0432\u0442\u0435\u043d\u0442\u0438\u0444\u0456\u043a\u0430\u0446\u0456\u0457",
+      "unbounded": false,
+      "unparsed": false
+    },
+    {
+      "exact": [],
+      "id": "CVE-2026-86060",
+      "published": "2026-09-05",
+      "ranges": [
+        {
+          "max_exclusive": "6.49.21",
+          "min_inclusive": "6.0.0"
+        },
+        {
+          "max_exclusive": "7.23.4",
+          "min_inclusive": "7.0.0"
+        },
+        {
+          "max_exclusive": "7.24.2",
+          "min_inclusive": "7.24.0"
+        }
+      ],
+      "title": "\u041f\u0456\u0434\u0432\u0438\u0449\u0435\u043d\u043d\u044f \u043f\u0440\u0430\u0432 \u0447\u0435\u0440\u0435\u0437 \u0456\u043c'\u044f \u043a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447\u0430 SSH",
+      "unbounded": false,
+      "unparsed": false
+    }
+  ],
+  "schema": 1,
+  "source": {
+    "kept": 87,
+    "name": "nvd",
+    "query": "virtualMatchString=cpe:2.3:o:mikrotik:routeros",
+    "reported": 87,
+    "url": "https://services.nvd.nist.gov/rest/json/cves/2.0"
+  },
+  "updated_at": "2026-10-24T18:34:08.961149+00:00"
+}

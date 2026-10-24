@@ -1,0 +1,51 @@
+{
+  "resultsPerPage": 2,
+  "startIndex": 0,
+  "totalResults": 3,
+  "vulnerabilities": [
+    {
+      "cve": {
+        "id": "CVE-2026-67278",
+        "vulnStatus": "Analyzed",
+        "published": "2026-09-05T20:17:18.257",
+        "descriptions": [{"lang": "en", "value": "Forged certificate acceptance. See https://example.invalid/secret for details."}],
+        "configurations": [{
+          "nodes": [{
+            "operator": "OR",
+            "negate": false,
+            "cpeMatch": [
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+                "versionStartIncluding": "7.0",
+                "versionEndExcluding": "7.23.6"
+              },
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:h:mikrotik:hex:-:*:*:*:*:*:*:*"
+              }
+            ]
+          }]
+        }]
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-2012-6050",
+        "vulnStatus": "Modified",
+        "published": "2012-11-27T00:57:04.000",
+        "descriptions": [{"lang": "en", "value": "Example exact-version issue."}],
+        "configurations": [{
+          "nodes": [{
+            "operator": "OR",
+            "negate": false,
+            "cpeMatch": [{
+              "vulnerable": true,
+              "criteria": "cpe:2.3:o:mikrotik:routeros:5.15:*:*:*:*:*:*:*"
+            }]
+          }]
+        }]
+      }
+    }
+  ]
+}
