@@ -299,6 +299,60 @@ def test_bounded_and_unbounded_matches_keep_uncertainty(tmp_path):
     assert outside["status"] == "UNKNOWN" and outside["decisive"] is True
 
 
+def test_floor_keeps_unbounded_uncertainty(tmp_path):
+    page = _one_page("CVE-2026-67278", [
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+            "versionStartIncluding": "7.0.0",
+            "versionEndExcluding": "7.23.6",
+        },
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+        },
+    ])
+    path = tmp_path / "cve_catalog.json"
+    updated = update_catalog(path, fetcher=lambda _start: page, sleeper=lambda _seconds: None, now=NOW)
+    loaded, error = load_catalog(path)
+    assert error is None
+    for catalog in (updated, loaded):
+        cve = next(item for item in catalog["cves"] if item["id"] == "CVE-2026-67278")
+        assert cve["unbounded"] is True
+        assert any(item.get("max_exclusive") == "7.24.3" for item in cve["ranges"])
+        assert statuses("7.24.2 (stable)", catalog)["CVE-2026-67278"] == "AFFECTED"
+        outside = next(
+            item for item in assess_catalog(parsed("7.24.3 (stable)"), catalog)
+            if item["id"] == "CVE-2026-67278"
+        )
+        assert outside["status"] == "UNKNOWN" and outside["decisive"] is True
+        assert headline(assess_catalog(parsed("7.24.3 (stable)"), catalog), True) == "UNKNOWN"
+
+
+def test_partial_unparsed_match_stays_decisive(tmp_path):
+    page = _one_page("CVE-2020-0003", [
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+            "versionStartIncluding": "7.1.0",
+            "versionEndExcluding": "7.2.0",
+        },
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:7.4:testing:*:*:*:*:*:*",
+        },
+    ])
+    updated = _refresh(tmp_path, page)
+    cve = next(item for item in updated["cves"] if item["id"] == "CVE-2020-0003")
+    assert cve["unparsed"] is True
+    assert cve["ranges"] == [{"min_inclusive": "7.1.0", "max_exclusive": "7.2.0"}]
+    alone = _only(updated, "CVE-2020-0003")
+    assert statuses("7.1.5 (stable)", alone)["CVE-2020-0003"] == "AFFECTED"
+    outside = next(item for item in assess_catalog(parsed("7.3 (stable)"), alone))
+    assert outside["status"] == "UNKNOWN" and outside["decisive"] is True
+    assert headline(assess_catalog(parsed("7.3 (stable)"), alone), True) == "UNKNOWN"
+
+
 def test_validator_rejects_empty_record_and_inverted_range(tmp_path):
     empty = embedded_catalog()
     empty["cves"].append({

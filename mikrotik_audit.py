@@ -36,7 +36,7 @@ from cve_catalog import (
     update_catalog,
 )
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 MAX_BYTES = 8 * 1024 * 1024
 MAX_ROWS = 1000
 MARKER = "@MT-AUDIT-1@"

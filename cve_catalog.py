@@ -5,7 +5,9 @@ The file ``cve_catalog.json`` is stored next to this module. Online runs refresh
 it from the NVD CVE 2.0 API when it is older than the configured age. The
 embedded floor for the September 2026 advisories is unioned back on every load,
 so a fetched feed can add CVEs and widen ranges but cannot mark those advisories
-as fixed earlier than the vendor bulletin of 2026-10-06.
+as fixed earlier than the vendor bulletin of 2026-10-06. An unbounded or
+unparsed condition on a seed CVE is kept, so a version outside the known
+ranges stays uncertain.
 """
 from __future__ import annotations
 
@@ -349,7 +351,12 @@ def build_catalog(pages: list[dict[str, Any]], now: datetime, reported: int) -> 
 
 
 def merge_floor(disk: dict[str, Any] | None) -> dict[str, Any]:
-    """Union embedded ranges into ``disk``. Seed ids cannot be deleted or narrowed."""
+    """Union embedded ranges into ``disk``. Seed ids cannot be deleted or narrowed.
+
+    The bulletin adds ranges and replaces the seed title. It does not clear
+    ``unbounded`` or ``unparsed``: a version outside the known ranges is not a
+    confirmed fix when part of the CVE was unbounded or could not be parsed.
+    """
     if disk is None:
         return embedded_catalog()
     by_id = {cve["id"]: _copy_cve(cve) for cve in disk["cves"]}
@@ -368,7 +375,6 @@ def merge_floor(disk: dict[str, Any] | None) -> dict[str, Any]:
             }
             continue
         current["ranges"] = _dedup(list(current["ranges"]) + floor_ranges)
-        current["unbounded"] = False
         current["title"] = _SEED_TITLES[cve_id]
     return {
         "schema": SCHEMA,
@@ -442,11 +448,11 @@ def _status(parsed: tuple[Any, ...] | None, cve: dict[str, Any]) -> str:
 def _decisive(status: str, cve: dict[str, Any]) -> bool:
     if status in {"AFFECTED", "UNAFFECTED"}:
         return True
-    if status != "UNKNOWN" or cve.get("unparsed"):
+    if status != "UNKNOWN":
         return False
-    # A completely unbounded CPE does not fail every router. Combined with a
-    # real range or exact release, the leftover uncertainty does.
-    if cve.get("unbounded") and not cve.get("ranges") and not cve.get("exact"):
+    # A CPE that is only unbounded or only unparsed does not fail every router.
+    # Combined with a real range or exact release, the leftover uncertainty does.
+    if (cve.get("unbounded") or cve.get("unparsed")) and not cve.get("ranges") and not cve.get("exact"):
         return False
     return True
 
@@ -835,7 +841,7 @@ def _stamp(value: Any) -> datetime | None:
 
 
 def _headers() -> dict[str, str]:
-    headers = {"User-Agent": "mikrotik-audit-cve/1.1.1", "Accept": "application/json"}
+    headers = {"User-Agent": "mikrotik-audit-cve/1.1.2", "Accept": "application/json"}
     key = os.environ.get("NVD_API_KEY", "")
     if re.fullmatch(r"[A-Za-z0-9_-]{8,128}", key):
         headers["apiKey"] = key
