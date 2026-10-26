@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only MikroTik assessment. Python >=3.10, system OpenSSH; no exploits.
 
-Run --help. Security boundaries and coverage limitations are in README.uk.md.
+Run --help. Security boundaries and coverage limitations are in README.md.
 Only fixed RouterOS read expressions are sent over SSH. RouterOS :set below
 assigns LOCAL script variables; it never changes a RouterOS configuration item.
 CVE ranges are read from cve_catalog.json next to this file and refreshed from NVD.
