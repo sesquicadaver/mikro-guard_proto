@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from datetime import date
 
 import pytest
@@ -100,3 +101,37 @@ def test_update_only_writes_beside_the_script(monkeypatch, tmp_path, capsys):
 def test_update_only_rejects_audit_options():
     with pytest.raises(SystemExit):
         main(["--update-cve", "--report", "report.json"])
+
+
+def test_unknown_prerelease_does_not_pass():
+    findings, report = by_id("7.26beta1")
+    assert findings["ROS-2026-09"] == "UNKNOWN"
+    ros = next(item for item in report["findings"] if item["id"] == "ROS-2026-09")
+    assert ros["evidence"]["assessment"] == "UNKNOWN"
+    assert "CVE-2026-67278" in ros["evidence"]["unconfirmed"]
+    assert report["verdict"] == "PARTIAL_NO_CONFIRMED_FINDINGS"
+    stable, _report = by_id("7.26.0 (stable)")
+    assert stable["ROS-2026-09"] == "PASS"
+
+
+def test_offline_audit_continues_when_catalog_is_unreadable(monkeypatch, tmp_path, capsys):
+    import cve_catalog
+
+    path = tmp_path / "cve_catalog.json"
+    path.write_text("{}\n", encoding="utf-8")
+    snap = tmp_path / "snap.json"
+    snap.write_text(json.dumps(snapshot("7.26beta1")), encoding="utf-8")
+    monkeypatch.setattr("mikrotik_audit.default_catalog_path", lambda: path)
+
+    def unreadable(_path):
+        raise PermissionError("permission denied")
+
+    monkeypatch.setattr(cve_catalog, "read_catalog", unreadable)
+    code = main(["--offline", str(snap), "--no-cve-update"])
+    captured = capsys.readouterr()
+    assert code == 2
+    assert "permission denied" in captured.err
+    assert "вбудовану підлогу" in captured.err
+    assert "Аудит не підтверджено" not in captured.err
+    assert "ROS-2026-09" in captured.out
+    assert '"assessment": "UNKNOWN"' in captured.out

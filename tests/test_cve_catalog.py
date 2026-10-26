@@ -68,8 +68,19 @@ def test_prerelease_rules():
     assert statuses("7.25.0beta3", catalog)["CVE-2026-67276"] == "UNAFFECTED"
     assert statuses("7.25.0beta3", catalog)["CVE-2026-67278"] == "UNKNOWN"
     assert statuses("7.24.3beta1", catalog)["CVE-2026-67278"] == "AFFECTED"
+    assert statuses("7.24.3rc1", catalog)["CVE-2026-67278"] == "AFFECTED"
     assert headline(assess_catalog(parsed("7.25.0beta3"), catalog), True) == "UNKNOWN"
     assert headline(assess_catalog(parsed("7.25.0 (stable)"), catalog), True) == "PATCHED"
+
+
+def test_unclassified_prerelease_is_unknown_not_patched():
+    catalog = embedded_catalog()
+    results = assess_catalog(parsed("7.26beta1"), catalog)
+    assert {item["status"] for item in results} == {"UNKNOWN"}
+    assert all(item["decisive"] for item in results)
+    assert headline(results, True) == "UNKNOWN"
+    assert headline(assess_catalog(parsed("7.26.0 (stable)"), catalog), True) == "PATCHED"
+    assert headline(assess_catalog(parsed("7.26rc1"), catalog), True) == "UNKNOWN"
 
 
 def test_narrowed_file_cannot_drop_the_floor(tmp_path):
@@ -206,6 +217,140 @@ def test_duplicate_json_key_is_rejected(tmp_path):
     path.write_bytes(b'{"schema": 1, "schema": 1}\n')
     _loaded, error = load_catalog(path)
     assert error
+
+
+def _one_page(cve_id, matches, total=1):
+    return {
+        "startIndex": 0,
+        "totalResults": total,
+        "vulnerabilities": [{
+            "cve": {
+                "id": cve_id,
+                "vulnStatus": "Analyzed",
+                "published": "2022-08-25T00:00:00.000",
+                "descriptions": [{"lang": "en", "value": "Synthetic RouterOS match."}],
+                "configurations": [{"nodes": [{"negate": False, "cpeMatch": matches}]}],
+            },
+        }],
+    }
+
+
+def _refresh(tmp_path, page):
+    return update_catalog(
+        tmp_path / "cve_catalog.json",
+        fetcher=lambda _start: page,
+        sleeper=lambda _seconds: None,
+        now=NOW,
+    )
+
+
+def _only(catalog, cve_id):
+    return {"cves": [item for item in catalog["cves"] if item["id"] == cve_id]}
+
+
+def test_cpe_update_keeps_beta_identity(tmp_path):
+    page = _one_page("CVE-2022-34960", [{
+        "vulnerable": True,
+        "criteria": "cpe:2.3:o:mikrotik:routeros:7.4:beta4:*:*:*:*:*:*",
+    }])
+    updated = _refresh(tmp_path, page)
+    cve = next(item for item in updated["cves"] if item["id"] == "CVE-2022-34960")
+    assert cve["exact"] == ["7.4.0beta4"]
+    alone = _only(updated, "CVE-2022-34960")
+    assert statuses("7.4beta4", alone)["CVE-2022-34960"] == "AFFECTED"
+    assert statuses("7.4 (stable)", alone)["CVE-2022-34960"] == "UNAFFECTED"
+    beta5 = next(item for item in assess_catalog(parsed("7.4beta5"), alone) if item["id"] == "CVE-2022-34960")
+    assert beta5["status"] == "UNKNOWN" and beta5["decisive"] is True
+
+
+def test_unsupported_cpe_update_is_unparsed(tmp_path):
+    page = _one_page("CVE-2020-0001", [{
+        "vulnerable": True,
+        "criteria": "cpe:2.3:o:mikrotik:routeros:7.4:testing:*:*:*:*:*:*",
+    }])
+    updated = _refresh(tmp_path, page)
+    cve = next(item for item in updated["cves"] if item["id"] == "CVE-2020-0001")
+    assert cve["exact"] == []
+    assert cve["unparsed"] is True
+    item = next(item for item in assess_catalog(parsed("7.4 (stable)"), _only(updated, "CVE-2020-0001")))
+    assert item["status"] == "UNKNOWN" and item["decisive"] is False
+
+
+def test_bounded_and_unbounded_matches_keep_uncertainty(tmp_path):
+    page = _one_page("CVE-2020-0002", [
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+            "versionStartIncluding": "7.1.0",
+            "versionEndExcluding": "7.2.0",
+        },
+        {
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:mikrotik:routeros:*:*:*:*:*:*:*:*",
+        },
+    ])
+    updated = _refresh(tmp_path, page)
+    cve = next(item for item in updated["cves"] if item["id"] == "CVE-2020-0002")
+    assert cve["unbounded"] is True
+    assert cve["ranges"] == [{"min_inclusive": "7.1.0", "max_exclusive": "7.2.0"}]
+    alone = _only(updated, "CVE-2020-0002")
+    assert statuses("7.1.5 (stable)", alone)["CVE-2020-0002"] == "AFFECTED"
+    outside = next(item for item in assess_catalog(parsed("7.3 (stable)"), alone))
+    assert outside["status"] == "UNKNOWN" and outside["decisive"] is True
+
+
+def test_validator_rejects_empty_record_and_inverted_range(tmp_path):
+    empty = embedded_catalog()
+    empty["cves"].append({
+        "id": "CVE-2020-0001",
+        "title": "порожній запис",
+        "published": "2020-01-01",
+        "ranges": [],
+        "exact": [],
+        "unbounded": False,
+        "unparsed": False,
+    })
+    with pytest.raises(CatalogError, match="невизначеності"):
+        write_catalog(tmp_path / "empty.json", empty)
+
+    inverted = embedded_catalog()
+    inverted["cves"].append({
+        "id": "CVE-2020-0002",
+        "title": "перевернутий діапазон",
+        "published": "2020-01-01",
+        "ranges": [{"min_inclusive": "7.5.0", "max_exclusive": "7.4.0"}],
+        "exact": [],
+        "unbounded": False,
+        "unparsed": False,
+    })
+    with pytest.raises(CatalogError, match="Порожній діапазон"):
+        write_catalog(tmp_path / "inverted.json", inverted)
+
+
+def test_permission_error_falls_back_to_floor(tmp_path, monkeypatch):
+    path = tmp_path / "cve_catalog.json"
+    path.write_text("{}\n", encoding="utf-8")
+
+    def unreadable(_path):
+        raise PermissionError("permission denied")
+
+    monkeypatch.setattr(cve_catalog, "read_catalog", unreadable)
+    loaded, error = load_catalog(path)
+    assert error == "permission denied"
+    assert loaded["source"]["name"] == "embedded"
+    assert statuses("7.24.2 (stable)", loaded)["CVE-2026-67278"] == "AFFECTED"
+
+
+def test_shipped_catalog_keeps_34960_prerelease():
+    loaded, error = load_catalog(default_catalog_path())
+    assert error is None
+    cve = next(item for item in loaded["cves"] if item["id"] == "CVE-2022-34960")
+    assert "7.4.0beta4" in cve["exact"]
+    assert "7.4.0" not in cve["exact"]
+    alone = {"cves": [cve]}
+    assert statuses("7.4beta4", alone)["CVE-2022-34960"] == "AFFECTED"
+    assert statuses("7.4 (stable)", alone)["CVE-2022-34960"] == "UNAFFECTED"
+    assert headline(assess_catalog(parsed("7.26beta1"), loaded), True) != "PATCHED"
 
 
 def test_api_key_is_not_taken_from_a_short_value(monkeypatch):

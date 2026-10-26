@@ -9,14 +9,11 @@ CVE ranges are read from cve_catalog.json next to this file and refreshed from N
 from __future__ import annotations
 
 import argparse
-from collections import Counter
-from datetime import datetime, timezone
 import hashlib
 import ipaddress
 import json
 import math
 import os
-from pathlib import Path
 import queue
 import re
 import shutil
@@ -25,6 +22,9 @@ import sys
 import threading
 import time
 import unicodedata
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
 
 from cve_catalog import (
     CatalogError,
@@ -36,7 +36,7 @@ from cve_catalog import (
     update_catalog,
 )
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 MAX_BYTES = 8 * 1024 * 1024
 MAX_ROWS = 1000
 MARKER = "@MT-AUDIT-1@"
@@ -885,7 +885,8 @@ class Checks:
                   "слабкі паролі, TLS handshake/ланцюжки сертифікатів, повний аналіз скриптів",
                   "приховані/видалені сліди компрометації та цілісність бінарних файлів",
                   "Wi-Fi/VPN/RADIUS/tunnel-політики, IPv6 ND/RA, відкладене застосування disable-ipv6",
-                  "бета/rc поза явним правилом 7.25.0 і CVE без меж версій у NVD"],
+                  "бета/rc поза діапазоном і поза явним правилом 7.25.0 дає UNKNOWN, не PASS",
+                  "CVE без меж версій у NVD"],
                  "PASS стосується лише конкретного правила, не пристрою загалом.")
         updated_at = self.catalog.get("updated_at")
         age = _catalog_age(updated_at, today)
@@ -1061,7 +1062,12 @@ def main(argv=None):
                   + " (" + str(len(catalog["cves"])) + " записів, " + str(catalog["updated_at"]) + ")")
             return 0
         if catalog_note:
-            print("[WARN] Каталог CVE не оновлено: " + catalog_note + ". Використано збережену копію.", file=sys.stderr)
+            if catalog.get("source", {}).get("name") == "embedded":
+                print("[WARN] Каталог CVE недоступний: " + catalog_note
+                      + ". Використано вбудовану підлогу бюлетеня 2026-10-06.", file=sys.stderr)
+            else:
+                print("[WARN] Каталог CVE не оновлено: " + catalog_note
+                      + ". Використано збережену копію.", file=sys.stderr)
         snapshot = read_snapshot(args.offline) if args.offline else collect(args)
         report = Checks(snapshot, args.untrusted_interface, args.trusted_network,
                         catalog=catalog, catalog_note=catalog_note).run(offline=bool(args.offline))

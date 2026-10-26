@@ -1,6 +1,6 @@
 [project]
 name = "mikrotik-audit"
-version = "1.1.0"
+version = "1.1.1"
 description = "Read-only MikroTik RouterOS assessment with a local CVE catalog"
 requires-python = ">=3.10"
 

@@ -30,11 +30,15 @@ MAX_CATALOG_BYTES = 2 * 1024 * 1024
 MAX_NVD_BYTES = 8 * 1024 * 1024
 MAX_CVES = 500
 MAX_RANGES = 40
-MAX_EXACT = 80
+MAX_EXACT = 160  # one RouterOS CVE can list dozens of distinct beta/rc builds
 PAGE_SIZE = 200
 MAX_PAGES = 10
 SEED_UPDATED = "2026-10-06T00:00:00+00:00"
 _VERSION = re.compile(r"(?:0|[1-9]\d{0,5})(?:\.(?:0|[1-9]\d{0,5})){0,2}")
+_EXACT_TEXT = re.compile(
+    r"(?P<ver>(?:0|[1-9]\d{0,5})(?:\.(?:0|[1-9]\d{0,5})){0,2})(?:(?P<stage>beta|rc)(?P<build>0|[1-9]\d{0,5}))?"
+)
+_UPDATE = re.compile(r"(beta|rc)(\d+)")
 _CVE_ID = re.compile(r"CVE-\d{4}-\d{4,7}")
 _RANGE_KEYS = {"min_inclusive", "min_exclusive", "max_inclusive", "max_exclusive"}
 
@@ -143,13 +147,37 @@ def format_version(value: tuple[int, int, int]) -> str:
     return ".".join(str(part) for part in value)
 
 
+def parse_exact(text: str) -> tuple[int, int, int, str, int] | None:
+    """Parse a catalog exact release, including a CPE update such as ``beta4``."""
+    if not isinstance(text, str):
+        return None
+    match = _EXACT_TEXT.fullmatch(text)
+    if match is None:
+        return None
+    release = parse_version(match.group("ver"))
+    if release is None:
+        return None
+    stage = match.group("stage") or ""
+    build = int(match.group("build") or 0)
+    return (*release, stage, build)
+
+
+def format_exact(release: tuple[int, int, int], stage: str = "", build: int = 0) -> str:
+    """Canonical exact release. A bare version is the stable release only."""
+    text = format_version(release)
+    if stage:
+        return text + stage + str(build)
+    return text
+
+
 def assess_catalog(parsed: tuple[Any, ...] | None, catalog: dict[str, Any]) -> list[dict[str, Any]]:
     """Classify one RouterOS version against every catalog entry.
 
     ``parsed`` is ``(major, minor, patch, stage, build)`` from the audit
     parser. ``stage`` is ``""``, ``"beta"``, or ``"rc"``. A prerelease sorts
     before the stable release with the same numbers, so the beta of a fix
-    version stays inside an exclusive upper bound.
+    version stays inside an exclusive upper bound. A prerelease that no range
+    or explicit rule classifies is UNKNOWN: absence of a match is not a fix.
     """
     if not isinstance(catalog, dict) or not isinstance(catalog.get("cves"), list):
         raise CatalogError("Некоректний каталог CVE")
@@ -183,13 +211,18 @@ def headline(results: list[dict[str, Any]], version_known: bool) -> str:
 
 
 def load_catalog(path: Path | None = None) -> tuple[dict[str, Any], str | None]:
-    """Load the on-disk catalog and union the embedded floor. Never fetches."""
+    """Load the on-disk catalog and union the embedded floor. Never fetches.
+
+    A missing file is the normal first-run case and returns the floor without
+    an error. ``OSError`` (including ``PermissionError``) and ``CatalogError``
+    also return the floor, with the error text so the audit can continue.
+    """
     path = default_catalog_path() if path is None else path
-    if not path.exists():
-        return embedded_catalog(), None
     try:
+        if not path.exists():
+            return embedded_catalog(), None
         disk = read_catalog(path)
-    except CatalogError as exc:
+    except (CatalogError, OSError) as exc:
         return embedded_catalog(), str(exc)
     return merge_floor(disk), None
 
@@ -198,7 +231,11 @@ def catalog_is_stale(path: Path, max_age: int, today: date | None = None) -> boo
     """True when an online audit should refresh the file before the assessment."""
     if max_age < 0:
         raise CatalogError("Некоректний вік каталогу")
-    if max_age == 0 or not path.is_file() or path.is_symlink():
+    try:
+        readable = path.is_file() and not path.is_symlink()
+    except OSError:
+        return True
+    if max_age == 0 or not readable:
         return True
     catalog, error = load_catalog(path)
     if error or catalog.get("source", {}).get("name") == "embedded":
@@ -392,35 +429,43 @@ def _status(parsed: tuple[Any, ...] | None, cve: dict[str, Any]) -> str:
         return "AFFECTED"
     if cve.get("unbounded") or cve.get("unparsed"):
         return "UNKNOWN"
-    if _exact_prerelease(parsed, cve):
-        return "UNKNOWN"
     ruled = _prerelease(parsed, cve["id"])
-    return ruled or "UNAFFECTED"
+    if ruled:
+        return ruled
+    # A named beta/rc is a different release. Do not call it patched merely
+    # because no stable range contains it.
+    if parsed[3] in {"beta", "rc"}:
+        return "UNKNOWN"
+    return "UNAFFECTED"
 
 
 def _decisive(status: str, cve: dict[str, Any]) -> bool:
     if status in {"AFFECTED", "UNAFFECTED"}:
         return True
-    return status == "UNKNOWN" and not cve.get("unbounded") and not cve.get("unparsed")
+    if status != "UNKNOWN" or cve.get("unparsed"):
+        return False
+    # A completely unbounded CPE does not fail every router. Combined with a
+    # real range or exact release, the leftover uncertainty does.
+    if cve.get("unbounded") and not cve.get("ranges") and not cve.get("exact"):
+        return False
+    return True
 
 
 def _matched(parsed: tuple[Any, ...], cve: dict[str, Any]) -> bool:
     key = _installed_key(parsed)
     for exact in cve.get("exact") or []:
-        value = parse_version(exact)
-        if value is not None and key[:3] == value and key[3] == 2:
+        spec = parse_exact(exact)
+        if spec is None or parsed[:3] != spec[:3]:
+            continue
+        if spec[3] == "":
+            if parsed[3] == "":
+                return True
+        elif parsed[3] == spec[3] and parsed[4] == spec[4]:
             return True
     for rng in cve.get("ranges") or []:
         if isinstance(rng, dict) and _in_range(key, rng):
             return True
     return False
-
-
-def _exact_prerelease(parsed: tuple[Any, ...], cve: dict[str, Any]) -> bool:
-    """A beta of a release listed as an exact CPE match is not that release."""
-    if parsed[3] not in {"beta", "rc"}:
-        return False
-    return any(parse_version(exact) == parsed[:3] for exact in cve.get("exact") or [])
 
 
 def _prerelease(parsed: tuple[Any, ...], cve_id: str) -> str | None:
@@ -518,14 +563,14 @@ def _absorb(by_id: dict[str, dict[str, Any]], cve: Any) -> None:
             "published": published,
             "ranges": _dedup(ranges),
             "exact": sorted(set(exact)),
-            "unbounded": unbounded and not ranges and not exact,
+            "unbounded": unbounded,
             "unparsed": unparsed,
         }
         return
     current["ranges"] = _dedup(list(current["ranges"]) + ranges)
     current["exact"] = sorted(set(current["exact"]) | set(exact))
     current["unparsed"] = bool(current["unparsed"] or unparsed)
-    current["unbounded"] = bool(unbounded and not current["ranges"] and not current["exact"])
+    current["unbounded"] = bool(current["unbounded"] or unbounded)
 
 
 def _routeros_matches(node: Any) -> list[dict[str, Any]]:
@@ -550,23 +595,41 @@ def _is_routeros(criteria: Any) -> bool:
 def _compile_match(match: dict[str, Any]) -> tuple[str, Any]:
     parts = _split_cpe(str(match.get("criteria")))
     version = parts[5] if len(parts) > 5 else "*"
-    exact = None
-    if version not in {"*", "-", ""}:
-        parsed = parse_version(version)
-        if parsed is None:
-            return "unparsed", None
-        exact = format_version(parsed)
+    update = parts[6] if len(parts) > 6 else "*"
+    exact = _exact_from_cpe(version, update)
+    if exact == "unparsed":
+        return "unparsed", None
     bounds = _bounds(match)
     if bounds is None:
         return "unparsed", None
     if bounds and exact:
-        # Keep both: a specific CPE version can sit beside a separate range.
         return "both", (bounds, exact)
     if bounds:
         return "range", bounds
     if exact:
         return "exact", exact
     return "unbounded", None
+
+
+def _exact_from_cpe(version: str, update: str) -> str | None:
+    """Return an exact release, None for a wildcard, or ``unparsed``.
+
+    CPE ``update`` of ``beta4`` / ``rc1`` is part of the release identity.
+    ``*`` and ``-`` keep the historical stable-only exact match.
+    """
+    if version in {"*", "-", ""}:
+        if update not in {"*", "-", ""}:
+            return "unparsed"
+        return None
+    parsed = parse_version(version)
+    if parsed is None:
+        return "unparsed"
+    if update in {"*", "-", ""}:
+        return format_exact(parsed)
+    match = _UPDATE.fullmatch(update)
+    if match is None:
+        return "unparsed"
+    return format_exact(parsed, match.group(1), int(match.group(2)))
 
 
 def _bounds(match: dict[str, Any]) -> dict[str, str] | None:
@@ -706,12 +769,16 @@ def _validate_cve(cve: Any, seen: set[str]) -> dict[str, Any]:
         or type(cve.get("unbounded")) is not bool or type(cve.get("unparsed")) is not bool
     ):
         raise CatalogError("Некоректні межі CVE")
+    cleaned_ranges = [_validate_range(item) for item in ranges]
+    cleaned_exact = [_validate_exact(item) for item in exact]
+    if not cleaned_ranges and not cleaned_exact and not cve["unbounded"] and not cve["unparsed"]:
+        raise CatalogError("CVE без меж і без позначки невизначеності")
     return {
         "id": cve_id,
         "title": title,
         "published": published,
-        "ranges": [_validate_range(item) for item in ranges],
-        "exact": [_validate_exact(item) for item in exact],
+        "ranges": cleaned_ranges,
+        "exact": cleaned_exact,
         "unbounded": cve["unbounded"],
         "unparsed": cve["unparsed"],
     }
@@ -728,14 +795,31 @@ def _validate_range(item: Any) -> dict[str, str]:
         if parsed is None:
             raise CatalogError("Некоректна межа діапазону CVE")
         cleaned[key] = format_version(parsed)
+    low = _endpoint(cleaned, "min")
+    high = _endpoint(cleaned, "max")
+    if low is not None and high is not None and low >= high:
+        raise CatalogError("Порожній діапазон CVE")
     return cleaned
 
 
+def _endpoint(rng: dict[str, str], side: str) -> tuple[int, int, int, int, int] | None:
+    if side == "min" and "min_inclusive" in rng:
+        return (*_must_version(rng["min_inclusive"]), 0, 0)
+    if side == "min" and "min_exclusive" in rng:
+        return (*_must_version(rng["min_exclusive"]), 2, 1)
+    if side == "max" and "max_exclusive" in rng:
+        return (*_must_version(rng["max_exclusive"]), 2, 0)
+    if side == "max" and "max_inclusive" in rng:
+        return (*_must_version(rng["max_inclusive"]), 2, 1)
+    return None
+
+
 def _validate_exact(item: Any) -> str:
-    parsed = parse_version(item) if isinstance(item, str) else None
+    parsed = parse_exact(item) if isinstance(item, str) else None
     if parsed is None:
         raise CatalogError("Некоректна точна версія CVE")
-    return format_version(parsed)
+    release = (parsed[0], parsed[1], parsed[2])
+    return format_exact(release, parsed[3], parsed[4])
 
 
 def _stamp(value: Any) -> datetime | None:
@@ -751,7 +835,7 @@ def _stamp(value: Any) -> datetime | None:
 
 
 def _headers() -> dict[str, str]:
-    headers = {"User-Agent": "mikrotik-audit-cve/1.1", "Accept": "application/json"}
+    headers = {"User-Agent": "mikrotik-audit-cve/1.1.1", "Accept": "application/json"}
     key = os.environ.get("NVD_API_KEY", "")
     if re.fullmatch(r"[A-Za-z0-9_-]{8,128}", key):
         headers["apiKey"] = key
