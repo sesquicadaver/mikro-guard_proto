@@ -1,6 +1,6 @@
 # МікроТік-аудит
 
-Read-only перевірка власного RouterOS: версія, служби, користувачі, firewall input, індикатори з бюлетеня вересня 2026. Скрипт не змінює конфігурацію і не містить експлойтів. На пристрій іде лише фіксований список команд читання через системний OpenSSH.
+Версія інструмента 1.1.2. Read-only перевірка власного RouterOS: версія, служби, користувачі, firewall input, індикатори з бюлетеня вересня 2026. Скрипт не змінює конфігурацію і не містить експлойтів. На пристрій іде лише фіксований список команд читання через системний OpenSSH.
 
 ## Запуск
 
@@ -33,6 +33,20 @@ NVD не кодує гілку 7.25.0 beta. Для п’яти CVE, закрит
 
 Каталог не доводить доступність з мережі, не замінює бюлетень, якого ще немає в NVD, і не є доказом відсутності компрометації.
 
+## Результат
+
+Вердикт завжди частковий: `PARTIAL_WITH_FINDINGS` або `PARTIAL_NO_CONFIRMED_FINDINGS`. `PASS` стосується одного правила, не пристрою.
+
+Код виходу складається з двох бітів. Біт 1 ставиться, якщо є `VULNERABLE_VERSION`, `MISCONFIGURATION`, `POTENTIAL_EXPOSURE` або `INDICATOR`. Біт 2 ставиться, якщо є хоч один `UNKNOWN`. Знахідка `COVERAGE-LIMIT` завжди має статус `UNKNOWN`, тому успішний запуск завершується з кодом 2.
+
+`--report` і `--snapshot` створюють лише новий файл і не перезаписують наявний. Права цього файлу `0600`. Якщо оновлення NVD не вдалося, попередній `cve_catalog.json` лишається, а в stderr пишеться попередження.
+
+## Межі
+
+Звіт сам перелічує непокрите: CVE поза локальним каталогом, фактична доступність з Інтернету, NAT/raw/mangle, маршрути, upstream ACL, VRF і повна VLAN/bonding топологія, слабкі паролі, TLS handshake, повний аналіз скриптів, приховані сліди компрометації, Wi-Fi/VPN/RADIUS, IPv6 ND/RA і відкладене застосування `disable-ipv6`. Бета або rc поза діапазоном і поза явним правилом 7.25.0 дає `UNKNOWN`. Повністю безмежний або повністю нерозібраний CVE не змінює вердикт версії.
+
+GitHub Actions виконує `pytest`, `ruff` і `mypy` для `cve_catalog.py` та `tests`. `mikrotik_audit.py` у крок lint і перевірки типів не входить. Окремих тестів SSH, firewall, L2 і парсера відповіді немає. Запуск на живому RouterOS або CHR у цих перевірках не виконується.
+
 ## Перевірки
 
 ```bash
@@ -52,6 +66,6 @@ python3 -m venv .venv
 | CPE `update` beta/rc є ідентичністю релізу; невідомий токен не стає стабільною версією | `_exact_from_cpe` | `test_cpe_update_keeps_beta_identity`, `test_unsupported_cpe_update_is_unparsed`, `test_shipped_catalog_keeps_34960_prerelease` |
 | Некласифікована beta/rc не отримує PASS | `_status`, `headline` | `test_unclassified_prerelease_is_unknown_not_patched`, `test_unknown_prerelease_does_not_pass` |
 | Обмежений діапазон разом із CPE без меж не стирає невизначеність; порожній і перевернутий діапазон відхиляються | `_absorb`, `_validate_cve`, `_validate_range` | `test_bounded_and_unbounded_matches_keep_uncertainty`, `test_validator_rejects_empty_record_and_inverted_range` |
-| Підлога бюлетеня не стирає безмежність насіннєвого CVE | `merge_floor` | `test_floor_keeps_unbounded_uncertainty` |
+| Підлога бюлетеня не стирає безмежність шести CVE | `merge_floor` | `test_floor_keeps_unbounded_uncertainty` |
 | Частково нерозібраний CVE не дає PATCHED поза відомим діапазоном | `_decisive` | `test_partial_unparsed_match_stays_decisive` |
 | Помилка читання каталогу не зупиняє аудит | `load_catalog`, `prepare_catalog` | `test_permission_error_falls_back_to_floor`, `test_offline_audit_continues_when_catalog_is_unreadable` |
